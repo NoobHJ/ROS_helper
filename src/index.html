@@ -1,0 +1,55 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pygame Control</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script
+      type="text/javascript"
+      src="https://pyodide-cdn2.iodide.io/v0.17.0/full/pyodide.js"
+    ></script>
+  </head>
+  <body>
+    <h1>Pygame Control</h1>
+    <div id="output"></div>
+
+    <button onclick="startPygame()">Start Pygame</button>
+    <button onclick="stopPygame()">Stop Pygame</button>
+
+    <script>
+      const socket = io();
+      let pyodide;
+
+      // Load Pyodide
+      async function loadPyodide() {
+        pyodide = await loadPyodide({
+          indexURL: "https://pyodide-cdn2.iodide.io/v0.17.0/full/",
+        });
+      }
+
+      // Listen for Pygame output
+      socket.on("pygameOutput", (data) => {
+        document.getElementById("output").innerText += data + "\n";
+      });
+
+      // Handle disconnect event
+      socket.on("disconnect", () => {
+        console.log("Disconnected from server");
+      });
+
+      // Function to start Pygame
+      async function startPygame() {
+        await loadPyodide();
+        socket.emit("controlPygame", { command: "start" });
+      }
+
+      // Function to stop Pygame
+      function stopPygame() {
+        socket.emit("controlPygame", { command: "stop" });
+      }
+    </script>
+  </body>
+</html>
