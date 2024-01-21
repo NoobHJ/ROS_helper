@@ -14,6 +14,8 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
+app.use(express.static(join(__dirname, "../public")));
+
 const PORT = 3100;
 
 app.get("/", (req, res) => {
@@ -29,6 +31,7 @@ io.on("connection", (socket) => {
 
   pygameProcess.stdout.on("data", (data) => {
     io.emit("pygameOutput", data.toString());
+    // console.log(data);
   });
 
   socket.on("disconnect", () => {
@@ -38,27 +41,33 @@ io.on("connection", (socket) => {
 });
 
 io.on("connection", (socket) => {
-  console.log("A user connected");
+  console.log("new game start");
 
-  const pygameProcess = spawn("python", [
-    join(__dirname, "path/to/your/pygame_script.py"),
-  ]);
-
-  pygameProcess.stdout.on("data", (data) => {
-    io.emit("pygameOutput", data.toString());
-  });
+  let pygameProcess;
 
   socket.on("controlPygame", (data) => {
     if (data.command === "start") {
       console.log("Received command to start Pygame");
+      pygameProcess = spawn("python3", [
+        join(__dirname, "./pymaping/pathfinding.py"),
+      ]);
+
+      pygameProcess.stdout.on("data", (output) => {
+        io.emit("pygameOutput", output.toString());
+      });
     } else if (data.command === "stop") {
       console.log("Received command to stop Pygame");
+      if (pygameProcess) {
+        pygameProcess.kill();
+      }
     }
   });
 
   socket.on("disconnect", () => {
     console.log("User disconnected");
-    pygameProcess.kill();
+    if (pygameProcess) {
+      pygameProcess.kill();
+    }
   });
 });
 

@@ -1,3 +1,4 @@
+# src/pymaping/pathfinding.py
 from tkinter import messagebox, Tk
 import pygame
 import sys

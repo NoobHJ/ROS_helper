@@ -5,34 +5,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pygame Control</title>
+    <title>경로 찾아보기</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
-    <script
-      type="text/javascript"
-      src="https://pyodide-cdn2.iodide.io/v0.17.0/full/pyodide.js"
-    ></script>
   </head>
   <body>
-    <h1>Pygame Control</h1>
-    <div id="output"></div>
+    <h1>1 경기장은 약 36mx11mx0.5m 이다.</h1>
+    <div>
+      pygame window가 열리면 마우스 좌클릭으로 장애물을 설치 + 마우스 우클릭으로
+      목표지점을 설정 + 엔터
+    </div>
+    <button onclick="startPygame()">새로운 경로찾기</button>
+    <button onclick="stopPygame()">중지</button>
 
-    <button onclick="startPygame()">Start Pygame</button>
-    <button onclick="stopPygame()">Stop Pygame</button>
+    <img src="/1.png" alt="Image" />
+    <div id="output"></div>
 
     <script>
       const socket = io();
-      let pyodide;
-
-      // Load Pyodide
-      async function loadPyodide() {
-        pyodide = await loadPyodide({
-          indexURL: "https://pyodide-cdn2.iodide.io/v0.17.0/full/",
-        });
-      }
 
       // Listen for Pygame output
       socket.on("pygameOutput", (data) => {
-        document.getElementById("output").innerText += data + "\n";
+        document.getElementById("output").innerText +=
+          data + "1경기장의 경로탐색 로그\n";
       });
 
       // Handle disconnect event
@@ -41,8 +35,7 @@
       });
 
       // Function to start Pygame
-      async function startPygame() {
-        await loadPyodide();
+      function startPygame() {
         socket.emit("controlPygame", { command: "start" });
       }
 
