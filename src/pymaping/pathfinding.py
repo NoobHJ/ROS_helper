@@ -3,13 +3,13 @@ from tkinter import messagebox, Tk
 import pygame
 import sys
 
-window_width = 360
-window_height = 110
+window_width = 360*4
+window_height = 110*4
 
 window = pygame.display.set_mode((window_width, window_height))
 
-columns = 36
-rows = 11
+columns = 36*3
+rows = 11*3
 
 box_width = window_width // columns
 box_height = window_height // rows

@@ -72,5 +72,9 @@ io.on("connection", (socket) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}\n http://localhost:3100 `);
 });
+
+// 파이썬 코드가 웹에서 작동 XXX ??
+// 1번 파이썬을 웹에서 작동하겠금 구성
+// 2번 알고리즘을 JS환경에서 구성
